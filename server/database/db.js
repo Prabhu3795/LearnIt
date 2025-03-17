@@ -6,6 +6,6 @@ import mongoose from "mongoose";
         console.log("Database connected");
     }
     catch(error){
-        consolr.log(error); 
+        console.log(error); 
     }
  }

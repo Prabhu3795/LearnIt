@@ -1,0 +1,31 @@
+.profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50px;
+    margin: 185px auto;
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 10px;      
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    @media(max-width: 768px){
+        width: 80%;
+        padding: 10px;
+        margin: 90px auto;
+    }
+    .profile-info{
+        text-align: left;
+        margin-top: 15px ;
+        p{
+            margin-bottom:10px;
+            color:rgb(20, 18, 18);
+
+            strong{
+                color:rgb(94, 23, 116);
+
+            }
+        }
+    }
+}

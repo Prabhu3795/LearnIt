@@ -2,49 +2,95 @@ import { User } from "../models/user.js"
 import bycrpt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import sendMail from "../middlewares/sendMail.js";
-export const register = async (req,res) => {
-    try{
-        const{email,name,password} = req.body;
-        let  user = await User.findOne({email});
-        if (user)
-            return res.status(400).json({
-            message:"User already exist",
+import TryCatch from "../middlewares/TryCatch.js";
+export const register = TryCatch (async (req,res) => {
+    const{email,name,password} = req.body;
+    let  user = await User.findOne({email});
+    if (user)
+        return res.status(400).json({
+        message:"User already exist",
+    });
+
+     const hashPassword = await bycrpt.hash(password,10)
+
+     user = {
+        name,
+        email,
+        password: hashPassword,
+     }
+
+     const otp = Math.floor(Math.random()*1000000);
+
+     const activationToken= jwt.sign({
+        user,
+        otp,
+     },process.env.Activation_Secret,
+     {
+         expiresIn: "5m",
+     });
+     const data ={
+        name,
+        otp,
+     };
+     await sendMail(
+        email,"silentdeath", data) ;
+
+     res.status(200).json({
+        message: "otp send to your mail" ,
+        activationToken,
+       });
+})
+    
+
+export const verifyUser = TryCatch(async(req,res)=>{
+ const {otp,activationToken} = req.body
+ const verify = jwt.verify(activationToken,process.env.Activation_Secret)
+ if(!verify) 
+    return res.status(400).json({
+      message: "Otp Expired",
+    });
+    if(verify.otp != otp) 
+        return res.status(400).json({
+         message: "Wrong Otp",
         });
+      await User.create({
+        name: verify.user.name,
+        email:verify.user.email,
+        password:verify.user.password,
+      })
 
-         const hashPassword = await bycrpt.hash(password,10)
+      res.json ({
+        message: "User Registered",
+      })
+});
 
-         user = {
-            name,
-            email,
-            password: hashPassword,
-         }
+export const loginUser = TryCatch(async(req,res)=>{
+   const {email, password} = req.body
 
-         const otp = Math.floor(Math.random()*1000000);
+   const user = await User.findOne({email}) // Add await here
 
-         const activationToken= jwt.sign({
-            user,
-            otp,
-         },process.env.Activation_Secret,
-         {
-             expiresIn: "5m",
-         });
-         const data ={
-            name,
-            otp,
-         };
-         await sendMail(
-            email,"silentdeath", data) ;
+   if(!user) 
+      return res.status(400).json({
+        message: "no user with this email",
+      });
+   const matchPassword = await bycrpt.compare(password, user.password); // Corrected variable name
 
-         res.status(200).json({
-            message: "otp send to your mail" ,
-            activationToken,
-           });
+   if(!matchPassword)
+      return res.status(400).json({
+        message: "wrong Password",
+     });
 
-    } catch (error) {
-        res.status(500).json({
-            message: error.message,
-        });
-    }
-};
+     const token = jwt.sign({_id: user._id}, process.env.Jwt_Sec,{
+      expiresIn: "15d",
+     });
 
-export const verifyUser 
+     res.json({ 
+      message: `Welcome Back ${user.name}`,
+      token,
+      user,
+     });
+});
+export const myProfile = TryCatch(async(req,res)=>{
+   const user= await User.findById(req.user._id);
+   res.json({ user });
+});
