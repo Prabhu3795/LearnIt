@@ -14,7 +14,7 @@ export const createCourse = TryCatch(async (req, res) => {
     if (!image) {
         return res.status(400).json({ message: "Image is required" });
     }
-    await Courses.create({
+    const course = await Courses.create({
         title,
         description,
         category,
@@ -26,26 +26,42 @@ export const createCourse = TryCatch(async (req, res) => {
 
     res.status(200).json({
         message: "Course created successfully",
+        courseId: course._id,
     });
 });
 
-export const addLecture = TryCatch(async (req, res) => {
-    const course = await Courses.findById(req.params.id);
+import mongoose from 'mongoose';
 
-    if (!course)
-        return res.status(404).json({
-            message: "Course not found",
-        });
+export const addLecture = TryCatch(async (req, res) => {
     const { title, description } = req.body;
     const file = req.file;
+    const courseId = req.params.id; 
+
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+        return res.status(400).json({ message: "Invalid Course ID" });
+    }
+    const course = await Courses.findById(courseId);
+    if (!course) {
+        return res.status(404).json({ message: "Course not found" });
+    }
+
+    if (!file) {
+        return res.status(400).json({ message: "Video file is required" });
+    }
+    if (!title || !description) {
+        return res.status(400).json({ message: "Title and description are required" });
+    }
+
     const lecture = await Lecture.create({
         title,
         description,
-        video: file?.path,
+        video: file.path,  
+        course: courseId,
     });
     course.lectures.push({
+        _id: lecture._id,
         title,
-        video: file?.path,
+        video: file.path,
     });
 
     await course.save();
