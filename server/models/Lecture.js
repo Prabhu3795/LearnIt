@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    Course:{
+    course:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Courses",
         required:true,

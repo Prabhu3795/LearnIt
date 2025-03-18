@@ -14,7 +14,7 @@ const Footer = () => {
             </p>
             <div className="social-links">
                 <a href=""><FaFacebook /></a>
-                <a href=""><SiGmail /></a>
+                <a href="mailto:learnit1591@gmail.com"><SiGmail /></a>
                 <a href=""><FaXTwitter /></a>
                 <a href=""><FaInstagramSquare /></a>
             </div>

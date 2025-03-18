@@ -37,14 +37,22 @@ export const addLecture = TryCatch(async (req, res) => {
     const file = req.file;
     const courseId = req.params.id; 
 
+    console.log("Received Course ID:", courseId);
+    console.log("Request File:", file);
+
     if (!mongoose.Types.ObjectId.isValid(courseId)) {
         return res.status(400).json({ message: "Invalid Course ID" });
     }
+
+    // ✅ Find the Course
     const course = await Courses.findById(courseId);
+    console.log("Found Course:", course);
+    
     if (!course) {
         return res.status(404).json({ message: "Course not found" });
     }
 
+    // ✅ Validate Required Fields
     if (!file) {
         return res.status(400).json({ message: "Video file is required" });
     }
@@ -52,12 +60,15 @@ export const addLecture = TryCatch(async (req, res) => {
         return res.status(400).json({ message: "Title and description are required" });
     }
 
+    // ✅ Fix: Include `course` field when creating Lecture
     const lecture = await Lecture.create({
         title,
         description,
         video: file.path,  
-        course: courseId,
+        course: course._id,   // Correctly set course reference
     });
+    console.log("Created Lecture:", lecture);
+
     course.lectures.push({
         _id: lecture._id,
         title,
@@ -65,6 +76,7 @@ export const addLecture = TryCatch(async (req, res) => {
     });
 
     await course.save();
+    console.log("Updated Course with new Lecture");
 
     res.status(200).json({
         message: "Lecture added successfully",
