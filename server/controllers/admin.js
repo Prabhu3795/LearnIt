@@ -43,8 +43,6 @@ export const addLecture = TryCatch(async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(courseId)) {
         return res.status(400).json({ message: "Invalid Course ID" });
     }
-
-    // ✅ Find the Course
     const course = await Courses.findById(courseId);
     console.log("Found Course:", course);
     
@@ -52,7 +50,6 @@ export const addLecture = TryCatch(async (req, res) => {
         return res.status(404).json({ message: "Course not found" });
     }
 
-    // ✅ Validate Required Fields
     if (!file) {
         return res.status(400).json({ message: "Video file is required" });
     }
@@ -60,7 +57,6 @@ export const addLecture = TryCatch(async (req, res) => {
         return res.status(400).json({ message: "Title and description are required" });
     }
 
-    // ✅ Fix: Include `course` field when creating Lecture
     const lecture = await Lecture.create({
         title,
         description,

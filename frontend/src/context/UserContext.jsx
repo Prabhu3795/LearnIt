@@ -28,6 +28,7 @@ export const UserContextProvider = ({ children }) => {
             setUser(data.user);
             setIsAuth(true);
             navigate("/");
+          //  fetchMyCourse();
         } catch (error) {
             setIsAuth(false);
             toast.error(error.response?.data?.message || "Login failed");
@@ -84,12 +85,17 @@ export const UserContextProvider = ({ children }) => {
 
     async function fetchUser() {
         try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error("No token found. Please log in again.");
+            }
+    
             const { data } = await axios.get(`${server}/api/user/me`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${token}`,
                 },
             });
-
+    
             setIsAuth(true);
             setUser(data.user);
         } catch (error) {
@@ -97,10 +103,12 @@ export const UserContextProvider = ({ children }) => {
             setUser(null);
             setIsAuth(false);
             localStorage.removeItem("token");
+            toast.error(error.response?.data?.message || "Session expired, please log in again.");
         } finally {
             setLoading(false);
         }
     }
+    
 
     useEffect(() => {
         let isMounted = true;

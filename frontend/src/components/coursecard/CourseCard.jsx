@@ -2,13 +2,14 @@ import React from 'react'
 import './courseCard.css'
 import { UserData } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { server } from '../../main';
 
 const CourseCard = ({course}) => {
   const navigate = useNavigate();
   const{user, isAuth}= UserData();
   return (
     <div className="course-card">
-        <img scr={`${server}/${course.image}`} alt="" className="course-image" />
+        <img src={`${server}/${course.image.replace(/\\/g, "/")}`} alt="Course Thumbnail" className="course-image" />
         <h3>{course.title}</h3>
         <p>Instructor-{course.createdBy}</p>
         <p>Duration-{course.duration} weeks</p>

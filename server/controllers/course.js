@@ -76,23 +76,45 @@ export const getMyCourses = TryCatch(async (req, res) => {
 
 export const checkout = TryCatch(async (req, res) => {
   handleValidationErrors(req, res);
-  const user= await User.findById(req.user._id);
-  const course = await Courses.findById(req.params.id);
-  if(user.subscription.includes(course._id)){
-    return res.status(400).json({
-      message:"You have already subscribed to this course"
-    });
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    return res.status(401).json({ message: "Unauthorized: User not found" });
   }
-  const options = {
-    amount: Number(course.price * 100),
-    currency: "INR",
-  };
-  const order = await instance.orders.create(options);
-  res.status(201).json({
-    order,
-    course,
-  });
+
+  const course = await Courses.findById(req.params.id);
+  if (!course) {
+    return res.status(404).json({ message: "Course not found" });
+  }
+
+  if (user.subscription.includes(course._id)) {
+    return res.status(400).json({ message: "You have already subscribed to this course" });
+  }
+
+  try {
+    // Generate a short unique receipt ID (Max 40 characters)
+    const receiptId = `order_${course._id.toString().slice(-8)}_${Date.now().toString().slice(-5)}`;
+
+    const options = {
+      amount: Number(course.price * 100), // Convert price to paise
+      currency: "INR",
+      receipt: receiptId, // Use shortened receipt ID
+    };
+
+    const order = await instance.orders.create(options);
+
+    res.status(201).json({
+      success: true,
+      order,
+      course,
+    });
+  } catch (error) {
+    console.error("Error creating Razorpay order:", error);
+    res.status(500).json({ success: false, message: "Error processing payment", error: error.message });
+  }
 });
+
+
 
 export const paymentVerification = TryCatch(async (req, res) => {
   const{razorpay_order_id,razorpay_payment_id,razorpay_signature,createdAt} = req.body;

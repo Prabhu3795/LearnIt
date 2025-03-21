@@ -84,6 +84,13 @@ export const loginUser = TryCatch(async(req,res)=>{
       expiresIn: "15d",
      });
 
+     res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+  });
+
      res.json({ 
       message: `Welcome Back ${user.name}`,
       token,

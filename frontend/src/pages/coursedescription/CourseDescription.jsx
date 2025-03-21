@@ -17,8 +17,19 @@ const CourseDescription = ({ user }) => {
 
     const [loading, setLoading] = useState(false);
     const { fetchUser } = UserData();
-    const { fetchCourse, course, fetchCourses } = CourseData();
-
+    const { fetchCourse, course, fetchCourses , fetchMyCourse } = CourseData();
+    
+    useEffect(() => {
+        const fetchMyCourseData = async () => {
+            if (fetchMyCourse) {
+                await fetchMyCourse(); 
+            } else {
+                console.warn("fetchMyCourse is not defined in CourseData");
+            }
+        };
+        fetchMyCourseData();
+    }, []);
+    
     useEffect(() => {
         fetchCourse(params.id);
     }, [params.id]);
@@ -28,20 +39,22 @@ const CourseDescription = ({ user }) => {
         setLoading(true);
 
         try {
-            const { data: { order } } = await axios.post(
-                `${server}/api/course/checkout/${params.id}`,
-                {},
-                {
-                    headers: { token },
-                }
+            const { data: { order } 
+        } = await axios.post(`${server}/api/course/checkout/${params.id}`,
+            {},
+            {headers: { 
+                token, 
+            }, 
+        }
             );
 
             const options = {
-                key: "rzp_test_EikYXmxoBIZHq0",
-                amount: order.amount, // Fixed here
+                key: "rzp_test_NtCAgfToshJdgU",
+                amount: order.id, 
                 currency: "INR",
                 name: "LearnIt",
                 description: "Grow and Rise",
+              //image:logo
                 order_id: order.id,
                 handler: async function (response) {
                     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
@@ -50,11 +63,14 @@ const CourseDescription = ({ user }) => {
                         const { data } = await axios.post(
                             `${server}/api/verification/${params.id}`,
                             { razorpay_order_id, razorpay_payment_id, razorpay_signature },
-                            { headers: { token } }
+                            { headers: { 
+                                token ,
+                            }, }
                         );
 
                         await fetchUser();
                         await fetchCourses();
+                        await fetchMyCourse();
                         toast.success(data.message);
                         setLoading(false);
                         navigate(`/payment-success/${razorpay_payment_id}`);
