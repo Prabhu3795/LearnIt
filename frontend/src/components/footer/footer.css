@@ -1,5 +1,5 @@
 footer{
-    background-color: rgb(149, 26, 190);
+    background: linear-gradient(135deg, #020007 0%, #1a0069 100%);
     color: white;
     text-align: center;
     padding: 20px 0;
@@ -14,7 +14,9 @@ footer{
         gap: 20px;
         p{
             margin: 0;
-            font-size: 14px;
+            font-size: 16px;
+            color: #f8f32b;
+            font-family: 'Times New Roman', Times, serif;
         }
         a{
             text-decoration: none;
