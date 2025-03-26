@@ -17,6 +17,7 @@ import PaymentSuccess from './pages/paymentsuccess/PaymentSuccess';
 import ContactPage from './pages/contact/Contact';
 import Dashboard from './pages/dashboard/Dashboard';
 import Coursestudy from './pages/coursestudy/Coursestudy';
+import Lecture from './pages/lecture/Lecture';
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/:id/dashboard" element={isAuth ? <Dashboard user={user} /> : <Login />} />
             <Route path="/course/study/:id" element={isAuth ? <Coursestudy user={user} /> : <Login />} />
+            <Route path="/lectures/:id" element={isAuth ? <Lecture user={user} /> : <Login />} />
           </Routes>
           <Footer />
         </BrowserRouter>

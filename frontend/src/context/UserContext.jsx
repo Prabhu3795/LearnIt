@@ -10,8 +10,8 @@ export const UserContextProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
     const [btnLoading, setBtnLoading] = useState(false);
     const [loading, setLoading] = useState(true);
-
-    async function loginUser(email, password, navigate) {
+    
+    async function loginUser(email, password, navigate, fetchMyCourse) {
         setBtnLoading(true);
         try {
             const { data } = await axios.post(`${server}/api/user/login`, {
@@ -28,7 +28,7 @@ export const UserContextProvider = ({ children }) => {
             setUser(data.user);
             setIsAuth(true);
             navigate("/");
-          //  fetchMyCourse();
+            fetchMyCourse();
         } catch (error) {
             setIsAuth(false);
             toast.error(error.response?.data?.message || "Login failed");
