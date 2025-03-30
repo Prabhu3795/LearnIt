@@ -75,7 +75,7 @@ const Lecture = ({ user }) => {
                     <div className="right">
                         {user && user.role === 'admin' && (
                             <button className="common-btn" onClick={() => setShow(!show)}>
-                                Add Lecture+
+                                {show ? "Close":"Add Lecture+"}
                             </button>
                         )}
                         {show && (
@@ -98,12 +98,18 @@ const Lecture = ({ user }) => {
                         )}
                         {lectures.length > 0 ? (
                             lectures.map((e, i) => (
-                                <div
-                                    onClick={() => fetchLecture(e._id)}
-                                    key={e._id}
-                                    className="lecture-number"
-                                >
-                                    {i + 1}. {e.title}
+                                <div key={e._id}>
+                                    <div
+                                        onClick={() => fetchLecture(e._id)}
+                                        className={`lecture-number ${lecture?._id === e._id ? 'active' : ''}`}
+                                    >
+                                        {i + 1}. {e.title}
+                                    </div>
+                                    {user && user.role === 'admin' && (
+                                        <button className="common-btn" style={{ background: 'red' }}>
+                                            Delete {e.title}
+                                        </button>
+                                    )}
                                 </div>
                             ))
                         ) : (

@@ -2,7 +2,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 5%;
+    padding: 10px 5%;
     background: linear-gradient(135deg, #020007 0%, #1a0069 100%);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     position: sticky;
