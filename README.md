@@ -92,3 +92,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Online lerning platform using MERN stack
 ![alt text](image.ipg)
+![LearnIt Screenshot](./image.jpg)
