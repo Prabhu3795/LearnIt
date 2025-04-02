@@ -28,7 +28,7 @@ const App = () => {
       {loading ? (
         <Loading />
       ) : (
-        <BrowserRouter>
+        <BrowserRouter basename='/LearnIt'>
           <Header isAuth={isAuth} />
           <Routes>
             <Route path="/" element={<Home />} />
