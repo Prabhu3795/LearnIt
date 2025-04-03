@@ -34,7 +34,7 @@ const Home = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="hero-subtitle"
           >
-            Grow And Rise With Our Expert Courses
+            Let's begin click below
           </motion.p>
           
           <motion.div

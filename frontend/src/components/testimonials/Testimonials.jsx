@@ -23,14 +23,14 @@ const Testimonials = () => {
       name: "Michael Johnson",
       position: "Student",
       message: "The course structure is perfect for working professionals. I could balance my job and upskilling easily.",
-      image: "https://th.bing.com/th/id/OIP.7CqHlq3X6J7jJpYKd5X0bwHaHa?w=173&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      image: "https://img.freepik.com/free-photo/cheerful-indian-businessman-smiling-closeup-portrait-jobs-career-campaign_53876-129417.jpg?ga=GA1.1.800750578.1743623061&semt=ais_hybrid",
     },
     {
       id: 4,
       name: "Sarah Williams",
       position: "Student",
       message: "The hands-on projects gave me real-world experience that helped me land my dream job!",
-      image: "https://th.bing.com/th/id/OIP.6pOXxw5Q9X5WJYkQ5Q5Q5QHaHa?w=173&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      image: "https://media.istockphoto.com/id/1354842602/photo/portrait-of-a-young-businesswoman-working-on-a-laptop-in-an-office.jpg?s=612x612&w=0&k=20&c=kfP1g2712RiaxsDriIxFo363ARlaL2D591s-22CnIo8=",
     },
   ];
 
