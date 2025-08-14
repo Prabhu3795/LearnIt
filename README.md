@@ -45,6 +45,21 @@ learnit/
 └── README.md
 ```
 
+## My Role in This Project
+This project was a collaborative effort. My primary responsibility was **designing the user interface (UI)**.
+
+My contributions included:
+- Creating the overall layout and structure for the web pages.
+- Designing responsive and mobile-friendly components.
+- Selecting the color palette, typography, and spacing for visual consistency.
+- Ensuring accessibility and ease of navigation for users.
+- Coordinating with backend developers to ensure UI matched functionality.
+
+---
+
+## Original Repository
+This project is a fork of [NiceNewton/LearnIt](https://github.com/NiceNewton/LearnIt), maintained here to highlight my **UI/UX design contributions**.
+
 ## 🤝 Contributors
 - Nice Newton
 - Adarsh Narayan
